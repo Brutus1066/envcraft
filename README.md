@@ -19,6 +19,7 @@
 
 [![Rust](https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=rust&logoColor=white)](https://www.rust-lang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![Tests](https://img.shields.io/badge/Tests-44%20Passing-brightgreen?style=for-the-badge)](https://github.com/Brutus1066/envcraft)
 [![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)](https://www.microsoft.com/windows)
 [![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)](https://www.linux.org/)
 [![macOS](https://img.shields.io/badge/macOS-000000?style=for-the-badge&logo=apple&logoColor=white)](https://www.apple.com/macos)
@@ -158,6 +159,86 @@ envcraft format .env --in-place
 
 ---
 
+## 📋 Demo
+
+Try the included demo files to see envcraft in action:
+
+### Validate a valid .env file
+
+```bash
+$ envcraft check demo/schema.yml demo/valid.env
+✓ validation passed
+```
+
+### Validate an invalid .env file
+
+```bash
+$ envcraft check demo/schema.yml demo/invalid.env
+error: missing required key: API_KEY
+error: key 'DEBUG' has invalid value 'maybe' (expected true or false)
+error: key 'PORT' has invalid value 'not_a_number' (expected an integer (e.g., 42, -10))
+✗ validation failed with 3 error(s)
+```
+
+### Diff between environments
+
+```bash
+$ envcraft diff demo/dev.env demo/prod.env
+~ API_KEY: sk_dev_key → sk_live_secret
++ CACHE_ENABLED=true
+~ DATABASE_URL: postgres://localhost:5432/dev_db → postgres://prod-server:5432/prod_db
+~ DEBUG: true → false
+~ HOST: localhost → 0.0.0.0
+- LOG_LEVEL=debug
+~ PORT: 3000 → 80
+
+7 difference(s) found
+```
+
+### Diff with redacted values
+
+```bash
+$ envcraft diff demo/dev.env demo/prod.env --redact
+~ API_KEY
++ CACHE_ENABLED
+~ DATABASE_URL
+~ DEBUG
+~ HOST
+- LOG_LEVEL
+~ PORT
+
+7 difference(s) found
+```
+
+### Format a messy file
+
+**Before (messy.env):**
+```env
+# Development environment
+
+port = 3000
+host=localhost
+debug=true
+database_url = postgres://localhost:5432/dev_db
+api_key=sk_dev_xyz789
+  extra_spaces  =   lots of whitespace   
+```
+
+**After:**
+```bash
+$ envcraft format demo/messy.env
+# Development environment
+
+API_KEY=sk_dev_xyz789
+DATABASE_URL=postgres://localhost:5432/dev_db
+DEBUG=true
+EXTRA_SPACES=lots of whitespace
+HOST=localhost
+PORT=3000
+```
+
+---
+
 ## 📋 Examples
 
 ### Example `.env` file
@@ -217,6 +298,68 @@ cargo test
 # Run with verbose test output
 cargo test -- --nocapture
 ```
+
+---
+
+## 🧪 Tests
+
+envcraft includes comprehensive test coverage:
+
+```
+running 32 tests
+test cli::tests::verify_cli ... ok
+test diff::tests::test_diff_added ... ok
+test diff::tests::test_diff_changed ... ok
+test diff::tests::test_diff_complex ... ok
+test diff::tests::test_diff_format_normal ... ok
+test diff::tests::test_diff_format_redacted ... ok
+test diff::tests::test_diff_identical ... ok
+test diff::tests::test_diff_removed ... ok
+test format::tests::test_format_complex ... ok
+test format::tests::test_format_empty_value ... ok
+test format::tests::test_format_mixed_case_key ... ok
+test format::tests::test_format_preserves_comments ... ok
+test format::tests::test_format_preserves_values ... ok
+test format::tests::test_format_sorts_alphabetically ... ok
+test format::tests::test_format_trims_whitespace ... ok
+test format::tests::test_format_uppercase_keys ... ok
+test parser::tests::test_empty_key_rejected ... ok
+test parser::tests::test_invalid_line ... ok
+test parser::tests::test_parse_empty_value ... ok
+test parser::tests::test_parse_preserves_line_structure ... ok
+test parser::tests::test_parse_quoted_values ... ok
+test parser::tests::test_parse_simple_env ... ok
+test parser::tests::test_parse_whitespace_handling ... ok
+test schema::tests::test_schema_invalid_type ... ok
+test schema::tests::test_schema_parsing ... ok
+test schema::tests::test_schema_type_aliases ... ok
+test schema::tests::test_validation_bool_case_insensitive ... ok
+test schema::tests::test_validation_extra_key ... ok
+test schema::tests::test_validation_missing_key ... ok
+test schema::tests::test_validation_success ... ok
+test schema::tests::test_validation_type_error_bool ... ok
+test schema::tests::test_validation_type_error_int ... ok
+
+test result: ok. 32 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+
+running 12 tests
+test test_check_extra_key_warning ... ok
+test test_check_missing_key ... ok
+test test_check_type_error ... ok
+test test_check_valid_env ... ok
+test test_diff_added_removed_changed ... ok
+test test_diff_identical_files ... ok
+test test_diff_redact ... ok
+test test_format_in_place ... ok
+test test_format_preserves_comments ... ok
+test test_format_stdout ... ok
+test test_help_flag ... ok
+test test_version_flag ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+```
+
+**Total: 44 tests passing ✓**
 
 ---
 
