@@ -1,0 +1,20 @@
+# Example schema for envcraft
+# Defines expected environment variables and their types
+
+# Database configuration
+DATABASE_URL: string
+DATABASE_POOL_SIZE: int
+
+# Server settings
+PORT: int
+HOST: string
+DEBUG: bool
+
+# Authentication
+API_KEY: string
+JWT_SECRET: string
+SESSION_TIMEOUT: int
+
+# Feature flags
+ENABLE_CACHE: bool
+ENABLE_METRICS: bool
