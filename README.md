@@ -17,13 +17,14 @@
 ╚════════════════════════════════════════════════════════════════════════════╝
 ```
 
+[![CI](https://github.com/Brutus1066/envcraft/actions/workflows/ci.yml/badge.svg)](https://github.com/Brutus1066/envcraft/actions/workflows/ci.yml)
 [![Rust](https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=rust&logoColor=white)](https://www.rust-lang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![Tests](https://img.shields.io/badge/Tests-44%20Passing-brightgreen?style=for-the-badge)](https://github.com/Brutus1066/envcraft)
 [![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)](https://www.microsoft.com/windows)
 [![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)](https://www.linux.org/)
 [![macOS](https://img.shields.io/badge/macOS-000000?style=for-the-badge&logo=apple&logoColor=white)](https://www.apple.com/macos)
-[![crates.io](https://img.shields.io/badge/crates.io-e6522c?style=for-the-badge&logo=rust&logoColor=white)](https://crates.io/crates/envcraft)
+[![crates.io](https://img.shields.io/crates/v/envcraft?style=for-the-badge&logo=rust&logoColor=white&color=e6522c)](https://crates.io/crates/envcraft)
 
 ---
 
@@ -68,7 +69,80 @@ The binary will be at `target/release/envcraft`.
 
 ---
 
-## 🚀 Usage
+## � CLI Reference
+
+```
+$ envcraft --help
+Precise tools for .env files
+
+Usage: envcraft <COMMAND>
+
+Commands:
+  check   Validate a .env file against a YAML schema
+  diff    Show semantic differences between two .env files
+  format  Normalize and format a .env file
+  help    Print this message or the help of the given subcommand(s)
+
+Options:
+  -h, --help     Print help
+  -V, --version  Print version
+```
+
+### envcraft check
+
+```
+$ envcraft check --help
+Validate a .env file against a YAML schema
+
+Usage: envcraft check <SCHEMA> <ENVFILE>
+
+Arguments:
+  <SCHEMA>   Path to the YAML schema file
+  <ENVFILE>  Path to the .env file to validate
+
+Options:
+  -h, --help     Print help
+  -V, --version  Print version
+```
+
+### envcraft diff
+
+```
+$ envcraft diff --help
+Show semantic differences between two .env files
+
+Usage: envcraft diff [OPTIONS] <FILE1> <FILE2>
+
+Arguments:
+  <FILE1>  Path to the first .env file
+  <FILE2>  Path to the second .env file
+
+Options:
+      --redact   Hide values in output (show only key names)
+  -h, --help     Print help
+  -V, --version  Print version
+```
+
+### envcraft format
+
+```
+$ envcraft format --help
+Normalize and format a .env file
+
+Usage: envcraft format [OPTIONS] <FILE>
+
+Arguments:
+  <FILE>  Path to the .env file to format
+
+Options:
+      --in-place  Modify the file in place instead of printing to stdout
+  -h, --help      Print help
+  -V, --version   Print version
+```
+
+---
+
+## �🚀 Usage
 
 ### Check: Validate against a schema
 
