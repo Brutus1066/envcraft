@@ -1,0 +1,13 @@
+# Demo Schema for envcraft
+# This schema defines what a valid .env file should contain
+
+# Required configuration
+PORT: int
+HOST: string
+DEBUG: bool
+
+# Database
+DATABASE_URL: string
+
+# API
+API_KEY: string
