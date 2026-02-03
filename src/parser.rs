@@ -129,8 +129,7 @@ fn strip_quotes(value: &str) -> String {
         let first = trimmed.chars().next();
         let last = trimmed.chars().next_back();
 
-        if (first == Some('"') && last == Some('"'))
-            || (first == Some('\'') && last == Some('\''))
+        if (first == Some('"') && last == Some('"')) || (first == Some('\'') && last == Some('\''))
         {
             return trimmed[1..trimmed.len() - 1].to_string();
         }
@@ -155,7 +154,10 @@ DEBUG=true
 "#;
         let env = EnvFile::from_str(content).unwrap();
 
-        assert_eq!(env.get("DATABASE_URL"), Some(&"postgres://localhost/db".to_string()));
+        assert_eq!(
+            env.get("DATABASE_URL"),
+            Some(&"postgres://localhost/db".to_string())
+        );
         assert_eq!(env.get("PORT"), Some(&"8080".to_string()));
         assert_eq!(env.get("DEBUG"), Some(&"true".to_string()));
     }

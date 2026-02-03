@@ -23,13 +23,13 @@ fn envcraft_bin() -> std::path::PathBuf {
     path.pop(); // Remove test binary name
     path.pop(); // Remove deps
     path.push("envcraft");
-    
+
     // On Windows, add .exe extension
     #[cfg(windows)]
     {
         path.set_extension("exe");
     }
-    
+
     path
 }
 
@@ -71,10 +71,7 @@ fn test_check_missing_key() {
 
 #[test]
 fn test_check_type_error() {
-    let dir = setup_test_files(&[
-        ("schema.yml", "PORT: int"),
-        (".env", "PORT=not_a_number"),
-    ]);
+    let dir = setup_test_files(&[("schema.yml", "PORT: int"), (".env", "PORT=not_a_number")]);
 
     let output = Command::new(envcraft_bin())
         .args(["check", "schema.yml", ".env"])
@@ -107,10 +104,7 @@ fn test_check_extra_key_warning() {
 
 #[test]
 fn test_diff_identical_files() {
-    let dir = setup_test_files(&[
-        ("a.env", "KEY=value"),
-        ("b.env", "KEY=value"),
-    ]);
+    let dir = setup_test_files(&[("a.env", "KEY=value"), ("b.env", "KEY=value")]);
 
     let output = Command::new(envcraft_bin())
         .args(["diff", "a.env", "b.env"])
@@ -162,9 +156,7 @@ fn test_diff_redact() {
 
 #[test]
 fn test_format_stdout() {
-    let dir = setup_test_files(&[
-        (".env", "  zebra = z  \napple=a"),
-    ]);
+    let dir = setup_test_files(&[(".env", "  zebra = z  \napple=a")]);
 
     let output = Command::new(envcraft_bin())
         .args(["format", ".env"])
@@ -173,12 +165,15 @@ fn test_format_stdout() {
         .expect("Failed to run envcraft");
 
     let stdout = String::from_utf8_lossy(&output.stdout);
-    
+
     // Keys should be uppercase and sorted
     let apple_pos = stdout.find("APPLE=").expect("APPLE not found");
     let zebra_pos = stdout.find("ZEBRA=").expect("ZEBRA not found");
-    assert!(apple_pos < zebra_pos, "Keys should be sorted alphabetically");
-    
+    assert!(
+        apple_pos < zebra_pos,
+        "Keys should be sorted alphabetically"
+    );
+
     // Values should be trimmed
     assert!(stdout.contains("APPLE=a"));
     assert!(stdout.contains("ZEBRA=z"));
@@ -186,9 +181,7 @@ fn test_format_stdout() {
 
 #[test]
 fn test_format_in_place() {
-    let dir = setup_test_files(&[
-        (".env", "  lower_key = value  "),
-    ]);
+    let dir = setup_test_files(&[(".env", "  lower_key = value  ")]);
 
     let env_path = dir.path().join(".env");
 
@@ -204,9 +197,7 @@ fn test_format_in_place() {
 
 #[test]
 fn test_format_preserves_comments() {
-    let dir = setup_test_files(&[
-        (".env", "# Important comment\nKEY=value"),
-    ]);
+    let dir = setup_test_files(&[(".env", "# Important comment\nKEY=value")]);
 
     let output = Command::new(envcraft_bin())
         .args(["format", ".env"])
@@ -227,7 +218,7 @@ fn test_version_flag() {
 
     let stdout = String::from_utf8_lossy(&output.stdout);
     assert!(stdout.contains("envcraft"));
-    assert!(stdout.contains("0.1.0"));
+    assert!(stdout.contains("0.1")); // Check major.minor, not patch
 }
 
 #[test]

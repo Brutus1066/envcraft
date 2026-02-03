@@ -189,10 +189,7 @@ pub fn run_check(schema_path: &Path, env_path: &Path) -> Result<bool, SchemaErro
         if result.extra.is_empty() {
             println!("✓ validation passed");
         } else {
-            println!(
-                "✓ validation passed with {} warning(s)",
-                result.extra.len()
-            );
+            println!("✓ validation passed with {} warning(s)", result.extra.len());
         }
         Ok(true)
     } else {
